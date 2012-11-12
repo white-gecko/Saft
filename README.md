@@ -1,13 +1,16 @@
-= Semantic Application Framework Saft =
+Semantic Application Framework Saft
+===================================
 
 Is a collection of PHP classes (also called Framework) which can be used to easily build semantic
 web applications.
 
-== The Name ==
+The Name
+--------
 Saft is a reverse recursive akronyme for Semantic-Web Web-Application Framework Saft. Because the
 Web is always there it can be removed from the name. Saft means in German juice.
 
-== Warranty / License ==
+Warranty / License
+------------------
 
 This program is free software. It comes without any warranty, to the extent permitted by applicable
 law. You can redistribute it and/or modify it under the terms of the
