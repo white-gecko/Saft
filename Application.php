@@ -42,6 +42,10 @@ class Saft_Application
         // TODO move some code here
     }
 
+    public function runJobs() {
+        
+    }
+
     public function setBaseUri ($baseUri)
     {
         $this->_baseUri = $baseUri;
