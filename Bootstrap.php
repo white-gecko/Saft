@@ -94,6 +94,11 @@ class Saft_Bootstrap
         return $request;
     }
 
+    protected function initWorker ()
+    {
+        return new Saft_Worker($this->_app);
+    }
+
     /**
      * Initializes the Logger Object
      */
