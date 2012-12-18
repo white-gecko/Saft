@@ -20,6 +20,10 @@ class Saft_Logger
     }
 
     public function info ($message) {
-        fwrite($this->_file, time() . ' - ' . $message . "\n");
+        fwrite($this->_file, time() . ' - ' . ' INFO: ' . $message . PHP_EOL);
+    }
+
+    public function error ($message) {
+        fwrite($this->_file, time() . ' - ' . ' ERROR: ' . $message . PHP_EOL);
     }
 }
