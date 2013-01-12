@@ -51,7 +51,11 @@ class Saft_Tools
     {
         // get accept header
         $header = $request->getHeader();
-        $acceptHeader = strtolower($header['Accept']);
+        if (isset($header['Accept'])) {
+            $acceptHeader = strtolower($header['Accept']);
+        } else {
+            $acceptHeader = '*/*';
+        }
 
         require_once 'Mimeparse.php';
         try {
