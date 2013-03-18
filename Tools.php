@@ -90,7 +90,7 @@ class Saft_Tools
         $nsDssn     = 'http://purl.org/net/dssn/';
 
         $words = array(
-            $nsAair  . 'makeFriend' => 'friended',
+            $nsAair  . 'MakeFriend' => 'friended',
             $nsAair  . 'Post'       => 'posted',
             $nsAair  . 'Share'      => 'shared',
             $nsAair  . 'Note'       => 'status note',
