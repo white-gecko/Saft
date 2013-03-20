@@ -5,6 +5,7 @@ class Saft_Tools
     /**
      * @warning This function sends a web request and might take a long time
      * @hint You should run this function asynchrounusly or independent of your UI
+     * @deprecated This function is deprecated in favoir of the LinkeddataHelper
      */
     public static function getLinkedDataResource($app, $uri)
     {

@@ -38,6 +38,19 @@ class Saft_Application
         return $this->_controllers[$controllerName];
     }
 
+    public function getHelper ($helperName)
+    {
+        if (!isset($this->_helpers[$helperName])) {
+            if (class_exists($helperName)) {
+                $this->_helpers[$helperName] = new $helperName($this);
+            } else {
+                throw new Exception('The specified helper "' . $helperName . '" does not exist');
+            }
+        }
+
+        return $this->_helpers[$helperName];
+    }
+
     public function run() {
         // TODO move some code here
     }
