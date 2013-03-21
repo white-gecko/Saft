@@ -58,6 +58,17 @@ class Saft_Bootstrap
     }
 
     /**
+     * Invalidate a resource if it has to be reinitialized
+     *
+     * @param $resourceName the name of the resource to invalidate
+     */
+    public function invalidateResource ($resourceName)
+    {
+        $resourceName = ucfirst(strtolower($resourceName));
+        unset($this->_resources[$resourceName]);
+    }
+
+    /**
      * Initializes the Request object
      */
     protected function initRequest ()
