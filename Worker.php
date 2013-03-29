@@ -2,7 +2,7 @@
 
 /**
  * This is an eager worker whome you can give your hard jobs and he will take care of it, when he
- * some spare time.
+ * has some spare time.
  */
 class Saft_Worker
 {
@@ -45,6 +45,9 @@ class Saft_Worker
         $model->addMultipleStatements($jobDescription);
     }
 
+    /**
+     * This method should be called by the Application when it is triggerd asynchronously.
+     */
     public function work ()
     {
         // get queue
@@ -55,11 +58,13 @@ class Saft_Worker
         $query = 'SELECT ?job ?data ?class' . PHP_EOL;
         $query.= 'WHERE {' . PHP_EOL;
         $query.= '<' . self::$queueUri . '> <' . self::$nsSaft . 'contains> ?job .' . PHP_EOL;
-        $query.= '?job <' . self::$nsSaft . 'data> ?data .' . PHP_EOL;
+        $query.= '?job <' . self::$nsSaft . 'data> ?data ;' . PHP_EOL;
         $query.= '     <' . self::$nsSaft . 'class> ?class .' . PHP_EOL;
         $query.= '}' . PHP_EOL;
 
         $result = $model->sparqlQuery($query);
+
+        print count($result) . ' Jobs outstanding.' . PHP_EOL;
 
         // instantiate job objects and start jobs
         foreach ($result as $jobSet) {

@@ -55,8 +55,13 @@ class Saft_Application
         // TODO move some code here
     }
 
+    /**
+     * This method starts the Application in the Job processing mode insted of normal server mode
+     * it creates a Worker and processes all outstanding jobs in the queue
+     */
     public function runJobs() {
-        
+        $worker = new Saft_Worker($this);
+        $worker->work();
     }
 
     public function setBaseUri ($baseUri)
