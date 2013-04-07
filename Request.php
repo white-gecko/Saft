@@ -1,5 +1,7 @@
 <?php
 
+require_once('fix/getallheaders.php');
+
 class Saft_Request
 {
     /**
