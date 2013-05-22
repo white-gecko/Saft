@@ -152,6 +152,18 @@ class Saft_Request
     }
 
     /**
+     * Returns the query string of the URL (the part after the '?')
+     */
+    public function getQueryString ()
+    {
+        $requestString = $_SERVER['REQUEST_URI'];
+        $questionMark = strpos($requestString, '?');
+        $queryString = substr($requestString, $questionMark + 1);
+
+        return $queryString;
+    }
+
+    /**
      * As described in [1] and [2] PHP replaces dots and other chars with an underscore. To get the
      * right keys from the array this method replaces them too.
      * [1] http://ca.php.net/variables.external
