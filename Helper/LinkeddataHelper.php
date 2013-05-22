@@ -13,6 +13,31 @@ class Saft_Helper_LinkeddataHelper extends Saft_Helper
      */
     public function getResource ($resourceUri)
     {
-        return Saft_Tools::getLinkedDataResource($this->_app, $resourceUri);
+        $model = $this->_app->getBootstrap()->getResource('Model');
+        $modelUri = $model->getModelIri();
+
+        $r = new Erfurt_Rdf_Resource($resourceUri);
+
+        // Try to instanciate the requested wrapper
+        $wrapperName = 'Linkeddata';
+        $wrapper = Erfurt_Wrapper_Registry::getInstance()->getWrapperInstance($wrapperName);
+
+        $wrapperResult = null;
+        $wrapperResult = $wrapper->run($r, $modelUri, true);
+
+        $newStatements = null;
+        if ($wrapperResult === false) {
+            // IMPORT_WRAPPER_NOT_AVAILABLE;
+        } else if (is_array($wrapperResult)) {
+            $newStatements = $wrapperResult['add'];
+            // TODO make sure to only import the specified resource
+            $newModel = new Erfurt_Rdf_MemoryModel($newStatements);
+            $newStatements = array();
+            $newStatements[$resourceUri] = $newModel->getPO($resourceUri);
+        } else {
+            // IMPORT_WRAPPER_ERR;
+        }
+
+        return $newStatements;
     }
 }
