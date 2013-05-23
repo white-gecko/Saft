@@ -63,6 +63,14 @@ class Saft_Template {
     }
 
     /**
+     * Set a HTTP response code
+     */
+    public function setResponseCode ($responseCode)
+    {
+        $this->_responseCode = $responseCode;
+    }
+
+    /**
      * With the method the browser can be redirected to a new location
      */
     public function redirect ($location, $responseCode = 303)

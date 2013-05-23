@@ -22,10 +22,9 @@ class Saft_Request
     private $_values;
 
     /**
-     * The URL of the current request
+     * The base URI of the current Request
      */
-    private $_requestUri;
-
+    private $_baseUri;
 
     /**
      * Constructor for the Request object.
@@ -157,28 +156,19 @@ class Saft_Request
     }
 
     /**
-     * Returns the URL of the current request
-     */
-    public function getRequestUri ()
-    {
-        if (!isset($this->_requestUri)) {
-            $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != "off") ? "https" : "http";
-            $this->_requestUri = $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-        }
-
-        return $this->_requestUri;
-    }
-
-    /**
      * Returns the base URL (the part before the '?')
      */
     public function getBaseUri ()
     {
-        $requestUri = $this->getRequestUri();
-        $questionMark = strpos($requestUri, '?');
-        $baseUri = substr($requestUri, 0, $questionMark);
+        return $this->_baseUri;
+    }
 
-        return $baseUri;
+    /**
+     * Set the base URL
+     */
+    public function setBaseUri ($baseUri)
+    {
+        $this->_baseUri = $baseUri;
     }
 
     /**

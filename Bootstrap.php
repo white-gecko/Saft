@@ -95,6 +95,7 @@ class Saft_Bootstrap
         }
 
         $request = new Saft_Request($_SERVER['REQUEST_METHOD'], $values);
+        $request->setBaseUri($this->_app->getBaseUri());
 
         $body = file_get_contents('php://input');
 
