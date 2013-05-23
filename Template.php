@@ -4,6 +4,8 @@ class Saft_Template {
 
     private $_layoutEnabled = true;
 
+    private $_responseCode = null;
+    private $_header = array();
     private $_contentFiles = null;
     private $_menuFiles = null;
     private $_layout = null;
@@ -51,7 +53,37 @@ class Saft_Template {
         $this->_rawContent = $rawContent;
     }
 
-    public function render () {
+    /**
+     * Set a HTTP header field for the response
+     * @todo I don't know if the header fields are case sensitive
+     */
+    public function setHeader ($field, $value)
+    {
+        $this->_header[$field] = $value;
+    }
+
+    /**
+     * With the method the browser can be redirected to a new location
+     */
+    public function redirect ($location, $responseCode = 303)
+    {
+        $this->_responseCode = $responseCode;
+        $this->setHeader('Location', $location);
+    }
+
+    /**
+     * This method sends the template and header to the browser
+     */
+    public function render ()
+    {
+        if ($this->_responseCode !== null) {
+            http_response_code($this->_responseCode);
+        }
+
+        foreach ($this->_header as $field => $value) {
+            header($field . ': ' . $value);
+        }
+
         if ($this->_layoutEnabled) {
             include $this->_layout;
         } else {

@@ -56,7 +56,7 @@ class Saft_Request
      */
     public function hasValue ($key, $method = null)
     {
-        $key = $this->_replaceKey($key);
+        $key = self::replaceKey($key);
         if ($method === null) {
             if (isset($this->_values['all'][$key])) {
                 $method = $this->_values['all'][$key];
@@ -77,8 +77,9 @@ class Saft_Request
      */
     public function getValue ($key, $method = null)
     {
-        $key = $this->_replaceKey($key);
-        if ($method === null) {
+        $key = self::replaceKey($key);
+
+        if ($method === null || $method == 'all') {
             if (isset($this->_values['all'][$key])) {
                 $method = $this->_values['all'][$key];
             } else {
@@ -88,6 +89,23 @@ class Saft_Request
 
         if (isset($this->_values[strtolower($method)][$key])) {
             return $this->_values[strtolower($method)][$key];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the parameters of the current request.
+     * @param $method optional, if this parameter is specified only values transfered with this
+     *              method are taken into account. If this parameter is empty only the get
+     *              parameters will be returned.
+     */
+    public function getParameters ($method = 'get')
+    {
+        $method = strtolower($method);
+
+        if (isset($this->_values[$method])) {
+            return $this->_values[$method];
         } else {
             return null;
         }
@@ -152,6 +170,18 @@ class Saft_Request
     }
 
     /**
+     * Returns the base URL (the part before the '?')
+     */
+    public function getBaseUri ()
+    {
+        $requestUri = $this->getRequestUri();
+        $questionMark = strpos($requestUri, '?');
+        $baseUri = substr($requestUri, 0, $questionMark);
+
+        return $baseUri;
+    }
+
+    /**
      * Returns the query string of the URL (the part after the '?')
      */
     public function getQueryString ()
@@ -170,7 +200,7 @@ class Saft_Request
      * [2] http://stackoverflow.com/questions/68651/
      *     can-i-get-php-to-stop-replacing-characters-in-get-or-post-arrays
      */
-    private function _replaceKey ($key)
+    public static function replaceKey ($key)
     {
         $chars = array(' ', '.', '[');
         for ($i = 128; $i <= 159; $i++ ) {
