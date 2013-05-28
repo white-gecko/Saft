@@ -11,6 +11,7 @@ class Saft_Template {
     private $_layout = null;
     private $_rawContent = null;
     private $_debugLog = '';
+    private $_debug = true;
 
     public static function getInstance ()
     {
@@ -39,6 +40,10 @@ class Saft_Template {
 
     public function setLayout ($layout) {
         $this->_layout = $layout;
+    }
+
+    public function disableDebug () {
+        $this->_debug = false;
     }
 
     public function addDebug ($debugString) {
