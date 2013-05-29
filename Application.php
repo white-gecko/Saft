@@ -5,6 +5,7 @@ require_once 'Bootstrap.php';
 class Saft_Application
 {
     protected $_appNamespace = null;
+    protected $_layout = null;
 
     private $_bootstrap = null;
     private $_baseUri = null;
@@ -52,7 +53,7 @@ class Saft_Application
     }
 
     public function run() {
-        // TODO move some code here
+        $this->_layout = Saft_Layout::getInstance();
     }
 
     /**

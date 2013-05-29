@@ -1,5 +1,5 @@
 <?php
-class Saft_Template {
+class Saft_Layout {
     private static $_instance = null;
 
     private $_layoutEnabled = true;
@@ -16,7 +16,7 @@ class Saft_Template {
     public static function getInstance ()
     {
         if (self::$_instance == null) {
-            self::$_instance = new Saft_Template();
+            self::$_instance = new Saft_Layout();
         }
         return self::$_instance;
     }
