@@ -6,12 +6,13 @@ class Saft_Layout {
 
     private $_responseCode = null;
     private $_header = array();
-    private $_contentFiles = null;
-    private $_menuFiles = null;
+    private $_contentFiles = array();
     private $_layout = null;
     private $_rawContent = null;
     private $_debugLog = '';
     private $_debug = true;
+
+    private $_options = array();
 
     public static function getInstance ()
     {
@@ -21,17 +22,9 @@ class Saft_Layout {
         return self::$_instance;
     }
 
-    public function __construct () {
-        if ($this->_menuFiles === null) {
-            $this->_menuFiles = array();
-        }
-        if ($this->_contentFiles === null) {
-            $this->_contentFiles = array();
-        }
-    }
-
-    public function addMenu ($menuFile) {
-        $this->_menuFiles[] = $menuFile;
+    public function __set ($name, $value)
+    {
+        $this->_options[$name] = $value;
     }
 
     public function addContent ($contentFile) {
@@ -98,7 +91,12 @@ class Saft_Layout {
         }
 
         if ($this->_layoutEnabled) {
-            include $this->_layout;
+            $options = $this->_options;
+            $options['_contentFiles'] = $this->_contentFiles;
+            $options['_debug'] = $this->_debug;
+            $options['_debugLog'] = $this->_debugLog;
+            $template = new Saft_Template($this->_layout, $options);
+            $template->render();
         } else {
             echo $this->_rawContent;
         }
