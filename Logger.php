@@ -2,7 +2,7 @@
 
 class Saft_Logger
 {
-
+    private $_log = '';
     private $_file;
 
     public function __construct ($app, $filePath = null)
@@ -19,11 +19,25 @@ class Saft_Logger
         fclose($this->_file);
     }
 
+    public function getLastLog ()
+    {
+        return $this->_log;
+    }
+
+    public function debug ($message) {
+        $this->write(time() . ' - ' . ' DEBUG: ' . $message . PHP_EOL);
+    }
+
     public function info ($message) {
-        fwrite($this->_file, time() . ' - ' . ' INFO: ' . $message . PHP_EOL);
+        $this->write(time() . ' - ' . ' INFO: ' . $message . PHP_EOL);
     }
 
     public function error ($message) {
-        fwrite($this->_file, time() . ' - ' . ' ERROR: ' . $message . PHP_EOL);
+        $this->write(time() . ' - ' . ' ERROR: ' . $message . PHP_EOL);
+    }
+
+    private function write ($line) {
+        $this->_log .= $line;
+        fwrite($this->_file, $line);
     }
 }
