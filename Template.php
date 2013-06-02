@@ -26,7 +26,7 @@ class Saft_Template
 
     public function partial ($file, $options = array())
     {
-        $partial = new Saft_Template($file, $options);
+        $partial = new Saft_Template('partials/' . $file, $options);
         $partial->render();
     }
 
@@ -35,7 +35,7 @@ class Saft_Template
      */
     public function render ()
     {
-        include $this->_file;
+        include 'templates/' . $this->_file;
     }
 
 }

@@ -53,7 +53,7 @@ class Saft_Application
     }
 
     public function run() {
-        $this->_layout = Saft_Layout::getInstance();
+        $this->_layout = new Saft_Layout($this);
     }
 
     /**

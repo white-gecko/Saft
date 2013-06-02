@@ -1,7 +1,6 @@
 <?php
 class Saft_Layout {
-    private static $_instance = null;
-
+    private $_app;
     private $_layoutEnabled = true;
 
     private $_responseCode = null;
@@ -11,15 +10,13 @@ class Saft_Layout {
     private $_rawContent = null;
     private $_debugLog = '';
     private $_debug = true;
+    private $_placeholders = array();
 
     private $_options = array();
 
-    public static function getInstance ()
+    public function __construct ($app)
     {
-        if (self::$_instance == null) {
-            self::$_instance = new Saft_Layout();
-        }
-        return self::$_instance;
+        $this->_app = $app;
     }
 
     public function __set ($name, $value)
@@ -35,12 +32,9 @@ class Saft_Layout {
         $this->_layout = $layout;
     }
 
-    public function disableDebug () {
-        $this->_debug = false;
-    }
-
-    public function addDebug ($debugString) {
-        $this->_debugLog .= $debugString . PHP_EOL;
+    public function setPlaceholder ($name, Saft_Template $placeholder)
+    {
+        $this->_placeholders[$name] = $placeholder;
     }
 
     public function disableLayout () {
@@ -92,14 +86,21 @@ class Saft_Layout {
 
         if ($this->_layoutEnabled) {
             $options = $this->_options;
-            $options['_contentFiles'] = $this->_contentFiles;
-            $options['_debug'] = $this->_debug;
-            $options['_debugLog'] = trim($this->_debugLog);
-            $template = new Saft_Template($this->_layout, $options);
+            $this->setPlaceholder('main.content', $this->_getMainContent());
+            $template = new Saft_Template_Layout($this->_layout, $options, $this->_placeholders);
             $template->render();
         } else {
             echo $this->_rawContent;
         }
+    }
+
+    private function _getMainContent ()
+    {
+        $bootstrap = $this->_app->getBootstrap();
+        $request = $bootstrap->getResource('request');
+        $controller = $request->getValue('c', 'get');
+        $action = $request->getValue('a', 'get');
+        return new Saft_Template($controller . '/' . $action . '.phtml', $this->_options);
     }
 
 }
