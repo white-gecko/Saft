@@ -40,7 +40,7 @@ class Saft_Layout {
     }
 
     public function addDebug ($debugString) {
-        $this->_debugLog .= $debugString . "\n";
+        $this->_debugLog .= $debugString . PHP_EOL;
     }
 
     public function disableLayout () {
@@ -94,7 +94,7 @@ class Saft_Layout {
             $options = $this->_options;
             $options['_contentFiles'] = $this->_contentFiles;
             $options['_debug'] = $this->_debug;
-            $options['_debugLog'] = $this->_debugLog;
+            $options['_debugLog'] = trim($this->_debugLog);
             $template = new Saft_Template($this->_layout, $options);
             $template->render();
         } else {
