@@ -8,6 +8,7 @@ class Saft_Layout {
     private $_contentFiles = array();
     private $_layout = null;
     private $_rawContent = null;
+    private $_rawFile = null;
     private $_debugLog = '';
     private $_debug = true;
     private $_placeholders = array();
@@ -42,7 +43,13 @@ class Saft_Layout {
     }
 
     public function setRawContent ($rawContent) {
+        $this->disableLayout();
         $this->_rawContent = $rawContent;
+    }
+
+    public function setRawFile ($rawFile) {
+        $this->disableLayout();
+        $this->_rawFile = $rawFile;
     }
 
     /**
@@ -90,7 +97,11 @@ class Saft_Layout {
             $template = new Saft_Template_Layout($this->_layout, $options, $this->_placeholders);
             $template->render();
         } else {
-            echo $this->_rawContent;
+            if ($this->_rawContent !== null) {
+                echo $this->_rawContent;
+            } else if ($this->_rawFile !== null) {
+                readfile($this->_rawFile);
+            }
         }
     }
 
