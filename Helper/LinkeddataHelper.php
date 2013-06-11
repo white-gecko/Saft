@@ -2,8 +2,14 @@
 class Saft_Helper_LinkeddataHelper extends Saft_Helper
 {
     /**
+     * Array of memoryModels with URI as key
+     */
+    private $_resources = array();
+
+    /**
      * This method gets the statements for the given resource which are available according to the
      * Linked Data rules {@link http://www.w3.org/DesignIssues/LinkedData.html}
+     * This method caches the memory model for one HTTP-request.
      *
      * @warning This function sends a web request and might take a long time
      * @hint You should run this function asynchrounusly or independent of your UI
@@ -13,6 +19,10 @@ class Saft_Helper_LinkeddataHelper extends Saft_Helper
      */
     public function getResource ($resourceUri)
     {
+        if (isset($this->_resources[$resourceUri])) {
+            return $this->_resources[$resourceUri];
+        }
+
         $model = $this->_app->getBootstrap()->getResource('Model');
         $modelUri = $model->getModelIri();
 
@@ -38,6 +48,22 @@ class Saft_Helper_LinkeddataHelper extends Saft_Helper
             // IMPORT_WRAPPER_ERR;
         }
 
+        $this->_resources[$resourceUri] = $newStatements;
         return $newStatements;
+    }
+
+    /**
+     * Method checks if a resource given by a URI exists or not
+     * @param string $resourceUri
+     * @return boolean
+     */
+    public function resourceExists ($resourceUri) {
+        $memoryModel = $this->getResource($resourceUri);
+        if ($memoryModel === null) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 }
