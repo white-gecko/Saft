@@ -23,7 +23,9 @@ class Saft_Helper_LinkeddataHelper extends Saft_Helper
             return $this->_resources[$resourceUri];
         }
 
-        $model = $this->_app->getBootstrap()->getResource('Model');
+        $bootstrap = $this->_app->getBootstrap();
+        $logger = $bootstrap->getResource('Logger');
+        $model = $bootstrap->getResource('Model');
         $modelUri = $model->getModelIri();
 
         $r = new Erfurt_Rdf_Resource($resourceUri);
@@ -38,6 +40,7 @@ class Saft_Helper_LinkeddataHelper extends Saft_Helper
         $newStatements = null;
         if ($wrapperResult === false) {
             // IMPORT_WRAPPER_NOT_AVAILABLE;
+            $logger->error('LinkeddataHelper: Wrapper result is false on fetching: "' . $resourceUri . '"');
         } else if (is_array($wrapperResult)) {
             $newStatements = $wrapperResult['add'];
             // TODO make sure to only import the specified resource
@@ -46,6 +49,7 @@ class Saft_Helper_LinkeddataHelper extends Saft_Helper
             $newStatements[$resourceUri] = $newModel->getPO($resourceUri);
         } else {
             // IMPORT_WRAPPER_ERR;
+            $logger->error('LinkeddataHelper: Import error on fetching: "' . $resourceUri . '"');
         }
 
         $this->_resources[$resourceUri] = $newStatements;
@@ -57,9 +61,13 @@ class Saft_Helper_LinkeddataHelper extends Saft_Helper
      * @param string $resourceUri
      * @return boolean
      */
-    public function resourceExists ($resourceUri) {
-        $memoryModel = $this->getResource($resourceUri);
-        if ($memoryModel === null) {
+    public function resourceDescriptionExists ($resourceUri) {
+        $newStatements = $this->getResource($resourceUri);
+        if (
+            $newStatements === null ||
+            empty($newStatements) ||
+            empty($newStatements[$resourceUri])
+        ) {
             return false;
         } else {
             return true;
