@@ -89,4 +89,14 @@ class Saft_Application
     {
         $this->_appNamespace = $namespace;
     }
+
+    public function ns ($prefix) {
+        $bootstrap = $this->getBootstrap();
+        $model = $bootstrap->getResource('model');
+        try {
+            return $model->getNamespaceByPrefix($prefix);
+        } catch (Erfurt_Namespace_Exception $e) {
+            return null;
+        }
+    }
 }
