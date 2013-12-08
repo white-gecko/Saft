@@ -11,12 +11,20 @@ class Saft_Logger
             $filePath = $app->getBaseDir() . '/xodx.log';
         }
 
-        $this->_file = fopen($filePath, 'a');
+        // Open the log file. Warnings are suppressed, to avoid notification if file does not exist.
+        $this->_file = @fopen($filePath, 'a');
+
+        // Write information to log, if log file couldn't be opened
+        if ($this->_file == false) {
+            $this->_log .= 'Log can\'t be written to file because file couln\'t be opened';
+        }
     }
 
     public function __destruct ()
     {
-        fclose($this->_file);
+        if ($this->_file !== false) {
+            fclose($this->_file);
+        }
     }
 
     public function getLastLog ()
@@ -38,6 +46,8 @@ class Saft_Logger
 
     private function write ($line) {
         $this->_log .= $line;
-        fwrite($this->_file, $line);
+        if ($this->_file !== false) {
+            fwrite($this->_file, $line);
+        }
     }
 }
